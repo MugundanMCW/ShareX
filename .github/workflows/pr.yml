@@ -11,7 +11,8 @@ permissions:
 jobs:
   build:
     name: Build
-    runs-on: windows-latest
+    # Build ARM64 natively on the Windows 11 ARM64 runner
+    runs-on: ${{ matrix.platform == 'ARM64' && 'windows-11-arm' || 'windows-latest' }}
 
     strategy:
       fail-fast: false

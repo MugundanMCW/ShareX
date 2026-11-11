@@ -14,7 +14,8 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: windows-latest
+    # Build ARM64 natively on the Windows 11 ARM64 runner
+    runs-on: ${{ matrix.platform == 'ARM64' && 'windows-11-arm' || 'windows-latest' }}
     environment: release
 
     permissions:
@@ -184,7 +185,7 @@ jobs:
       - name: Build Setup (x64)
         if: matrix.platform == 'ARM64'
         run: |
-          # Build ShareX.Setup and its dependencies for x64 since it can't run as ARM64 on CI
+          # Build ShareX.Setup and its dependencies for x64 (runs under x64 emulation on windows-11-arm)
           dotnet build --configuration "${{ matrix.configuration }}" -p:Platform="x64" --self-contained true "ShareX.Setup\ShareX.Setup.csproj"
 
       - name: Setup
